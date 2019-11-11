@@ -66,3 +66,17 @@ who earn such amount of salary which is the smallest salary of any of the depart
 select first_name, last_name, salary, department_id from employees order by salary;
 select first_name, last_name, salary, department_id from employees
 where salary in (select min(salary) from employees GROUP BY department_id );
+
+/*
+23. Write a query to display the employee number, name( first name and last name ), and salary for all employees 
+who earn more than the average salary and who work in a department with any employee with a J in their name.
+*/
+select emplyee_id, first_name, last_name, salary from employees
+where department_id in (select department_id from employees where first_name like '%J%')
+and salary > (select avg(salary) from employees) 
+
+/*
+24. Display the employee name( first name and last name ), employee id, and job title for all employees whose department location is Toronto.
+*/
+select first_name, last_name, emplyee_id, job_title from employees, jobs
+where department_id = (select department_id from departments where location_id = (select location_id from locations where city = 'Toronto'));
