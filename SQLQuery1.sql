@@ -219,6 +219,7 @@ select emplyee_id, first_name, last_name, job_id, salary from employees order by
 select department_id from employees
 /*get list of dipartments*/
 select department_id from employees group by department_id
+/*select avarege salary for each department*/
 select AVG(salary) from employees group by department_id
 /*
 The ANY operator returns true if any of the subquery values meet the condition.
@@ -228,3 +229,30 @@ The ALL operator returns true if all of the subquery values meet the condition.
 SELECT emplyee_id, first_name, last_name, job_id, salary FROM employees 
 WHERE salary > ALL (SELECT AVG(salary) FROM employees GROUP BY department_id);
 
+/* 29. Write a query to display the employee name( first name and last name ) and department for all employees
+for any existence of those employees whose salary is more than 3700.*/
+
+/*
+The EXISTS operator is used to test for the existence of any record in a subquery.
+The EXISTS operator returns true if the subquery returns one or more records.
+The EXISTS operator is a logical operator that allows you to check whether a subquery returns any row. 
+The EXISTS operator returns TRUE if the subquery returns one or more row.
+*/
+select first_name, last_name, department_id, salary from employees --this expression does not work correct
+where exists (select salary from employees where salary > 3700); -- returns all rows in table (107 rows)
+
+
+select first_name, last_name, department_id, salary from employees
+where salary in (select salary from employees where salary > 3700); --returns rows where employee salary more then 3700 (67 rows)
+
+select first_name, last_name, department_id, salary from employees --the query returns the same result 67 rows
+where salary > 3700
+
+SELECT first_name, last_name, department_id 
+FROM employees 
+WHERE EXISTS (SELECT * FROM employees WHERE salary > 3700 );
+
+/*30. Write a query to display the department id and the total salary for those departments which contains at least one employee*/
+SELECT departments.department_id, result1.total_amt FROM departments, 
+(SELECT employees.department_id, SUM(employees.salary) as total_amt FROM employees GROUP BY department_id) as result1 
+WHERE result1.department_id = departments.department_id;
