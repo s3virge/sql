@@ -174,12 +174,57 @@ and department_id in (select department_id from employees where first_name like 
 23. Write a query to display the employee number, name( first name and last name ), and salary for all employees 
 who earn more than the average salary and who work in a department with any employee with a J in their name.
 */
-select emplyee_id, first_name, last_name, salary from employees
-where department_id in (select department_id from employees where first_name like '%J%')
-and salary > (select avg(salary) from employees) 
+select emplyee_id, first_name, last_name, salary from employees 
+where department_id in (select department_id from employees where first_name like '%J%') 
+and salary > (select avg(salary) from employees);
 
 /*
 24. Display the employee name( first name and last name ), employee id, and job title for all employees whose department location is Toronto.
 */
-select first_name, last_name, emplyee_id, job_title from employees, jobs
+select location_id from locations where city = 'Toronto';
+select department_id, location_id from departments;
+select * from employees where department_id = (select department_id from departments where location_id = (select location_id from locations where city = 'Toronto'));
+
+select first_name, last_name, emplyee_id, job_id from employees
 where department_id = (select department_id from departments where location_id = (select location_id from locations where city = 'Toronto'));
+
+/*
+25. Write a query to display the employee number, name( first name and last name ) and job title for all employees whose salary is smaller than any salary of those employees whose job title is MK_MAN.
+*/
+select emplyee_id, first_name, last_name, job_id from employees
+where salary < (select min(salary) from employees where job_id = 'MK_MAN');
+
+/*
+26. Write a query to display the employee number, name( first name and last name ) and job title for all employees 
+whose salary is smaller than any salary of those employees whose job title is MK_MAN. Exclude Job title MK_MAN.
+*/
+select emplyee_id, first_name, last_name, job_id from employees
+where salary < (select min(salary) from employees where job_id = 'MK_MAN')
+and not job_id = 'MK_MAN';
+
+/*
+27. Write a query to display the employee number, name( first name and last name ) and job title for all employees 
+whose salary is more than any salary of those employees whose job title is PU_MAN. Exclude job title PU_MAN.
+*/
+select emplyee_id, first_name, last_name, job_id from employees
+where salary > (select max(salary) from employees where job_id = 'PU_MAN')
+and not job_id = 'PU_MAN';
+
+/*
+28. Write a query to display the employee number, name( first name and last name ) and job title for all employees whose salary is more than any average salary of any department.
+*/
+select * from employees; --6461
+select emplyee_id, first_name, last_name, job_id, salary from employees order by salary desc;
+
+select department_id from employees
+/*get list of dipartments*/
+select department_id from employees group by department_id
+select AVG(salary) from employees group by department_id
+/*
+The ANY operator returns true if any of the subquery values meet the condition.
+The ALL operator returns true if all of the subquery values meet the condition.
+*/
+
+SELECT emplyee_id, first_name, last_name, job_id, salary FROM employees 
+WHERE salary > ALL (SELECT AVG(salary) FROM employees GROUP BY department_id);
+
