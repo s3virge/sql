@@ -253,6 +253,21 @@ FROM employees
 WHERE EXISTS (SELECT * FROM employees WHERE salary > 3700 );
 
 /*30. Write a query to display the department id and the total salary for those departments which contains at least one employee*/
-SELECT departments.department_id, result1.total_amt FROM departments, 
-(SELECT employees.department_id, SUM(employees.salary) as total_amt FROM employees GROUP BY department_id) as result1 
+SELECT departments.department_id, result1.total_amt FROM departments, (SELECT employees.department_id, SUM(employees.salary) as total_amt FROM employees GROUP BY department_id) as result1 
 WHERE result1.department_id = departments.department_id;
+
+/*31. Write a query to display the employee id, name ( first name and last name ) and the job id column with a modified title SALESMAN for those employees 
+whose job title is ST_MAN and DEVELOPER for whose job title is IT_PROG*/
+select * from employees;
+
+SELECT emplyee_id, first_name, last_name, 
+CASE job_id 
+WHEN 'ST_MAN' THEN 'SALESMAN' 
+WHEN 'IT_PROG' THEN 'DEVELOPER' 
+ELSE job_id 
+END 
+AS designation, salary 
+FROM employees;
+
+/*32. Write a query to display the employee id, name ( first name and last name ), salary 
+and the SalaryStatus column with a title HIGH and LOW respectively for those employees whose salary is more than and less than the average salary of all employees.*/
